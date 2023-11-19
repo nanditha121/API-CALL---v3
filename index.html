@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Information</title>
+</head>
+<body>
+
+<!-- Country Dropdown -->
+<label for="countrySelect">Select a country:</label>
+<select id="countrySelect" onchange="getUniversities()">
+    <option value="India">India</option>
+    <!-- Add more countries as needed -->
+</select>
+
+<!-- Container to display university information -->
+<div id="universityContainer"></div>
+
+<script>
+    function getUniversities() {
+        // Get the selected country from the dropdown
+        var selectedCountry = document.getElementById("countrySelect").value;
+
+        // Make API request
+        fetch(`universities.hipolabs.com/search?country=India${selectedCountry}}`)
+            .then(response => response.json())
+            .then(data => displayUniversities(data))
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    function displayUniversities(universities) {
+        // Clear previous content in the container
+        document.getElementById("universityContainer").innerHTML = "";
+
+        // Create a row for each university with 3 columns
+        universities.forEach((university, index) => {
+            if (index % 3 === 0) {
+                var row = document.createElement("div");
+                row.classList.add("row");
+                document.getElementById("universityContainer").appendChild(row);
+            }
+
+            // Create a card for each university
+            var card = document.createElement("div");
+            card.classList.add("card");
+            card.innerHTML = `<h3>${university.name}</h3><p>Domains: ${university.domains.join(", ")}</p>`;
+            
+            // Append the card to the current row
+            document.querySelector(".row:last-child").appendChild(card);
+        });
+    }
+</script>
+
+<style>
+    /* Basic styling for better visualization */
+    .row {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 5px;
+        width: 30%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+</body>
+</html>
